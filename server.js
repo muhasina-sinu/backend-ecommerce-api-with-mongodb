@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const products = require('./routes/products');
+const customers = require('./routes/customers');
 
 dotenv.config();
 const port = process.env.PORT || 3000;
@@ -10,6 +11,7 @@ const db_connection_string = process.env.DATABASE_URL;
 const app = express();
 app.use(express.json());
 app.use('/api/products',products);
+app.use('/api/customers',customers);
 
 mongoose.connect(db_connection_string);
 const db = mongoose.connection;
