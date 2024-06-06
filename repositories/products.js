@@ -28,12 +28,17 @@ async function deleteProduct(id){
 }
 
 async function getProductsByBrandId(brand_id){
-    const result = await Product.find(brand_id).populate(['category','brand']);
+    const result = await Product.find({brand:brand_id}).populate(['category','brand']);
     return result;
 }
 async function getProductsByCategoryId(category_id){
-    const result = await Product.find(category_id).populate(['category','brand']);
+    const result = await Product.find({category:category_id}).populate(['category','brand']);
     return result;
+}
+
+async function getUnitPrice(product_id){
+    const result = await Product.findOne({_id:product_id});
+    return result.price;
 }
 
 module.exports= { 
@@ -43,6 +48,7 @@ module.exports= {
     updateProduct,
     deleteProduct,
     getProductsByBrandId,
-    getProductsByCategoryId
+    getProductsByCategoryId,
+    getUnitPrice
     
 };

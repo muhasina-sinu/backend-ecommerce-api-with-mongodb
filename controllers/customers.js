@@ -1,9 +1,13 @@
+const asyncHandler = require('../middlewares/asyncHandler');
 const {Customer} = require('../models/customers');
 const customerRepositories = require('../repositories/customers');
 const { createJwt } = require('../utils/jwtHelper');
 const { hashPassword,verifyPassword } = require('../utils/passwordhelper');
 
-const createCustomer =async (req,res)=>{
+//@desc sign up
+//@router post /api/customers
+//@access public
+const createCustomer =asyncHandler( async (req,res)=>{
     const hashedPassword = hashPassword(req.body.password);
     const newCustomer = new Customer({
         name:req.body.name,
@@ -16,9 +20,12 @@ const createCustomer =async (req,res)=>{
     user:savedData.name,
     token:token});
 
-}
+})
 
-const login = async (req,res,next)=>{
+//@desc login
+//@router post /api/customers/login
+//@access customer
+const login = asyncHandler (async (req,res,next)=>{
     const {email,password} = req.body;
     const customers =  await customerRepositories.getCustomer(email);
     if(!customers || customers.length == 0){
@@ -35,12 +42,15 @@ const login = async (req,res,next)=>{
        });
     }
     return res.status(400).json("invalid credentials");
-  };
+  })
 
-const getCustomers = async(req,res)=>{
+//@desc get customers
+//@router get /api/customers
+//@access public  
+const getCustomers = asyncHandler(async(req,res)=>{
     const customers = await customerRepositories.getCustomers();
     res.status(200).json(customers);
-}
+})
 
 
 module.exports = {createCustomer,getCustomers,login};
