@@ -11,16 +11,17 @@ const {
   getProductsByBrandId,
   getProductsByCategoryId
 } = require("../controllers/products");
+const { verifyRoles,verifyTokenHandler } = require("../middlewares/jwtHandler");
 
 router.get("/brands", getBrands);
-router.post("/brands", createBrand);
+router.post("/brands",[verifyTokenHandler,verifyRoles(['admin'])], createBrand);
 router.get("/categories", getCategories);
-router.post("/categories", createCategory);
+router.post("/categories",[verifyTokenHandler,verifyRoles(['admin'])], createCategory);
 router.get("/", getProducts);
 router.get("/:id", getProductById);
-router.post("/", createProduct);
-router.patch("/:id", updateProduct);
-router.delete("/:id", deleteProduct);
+router.post("/",[verifyTokenHandler,verifyRoles(['admin'])] ,createProduct);
+router.patch("/:id",[verifyTokenHandler,verifyRoles(['admin'])], updateProduct);
+router.delete("/:id",[verifyTokenHandler,verifyRoles(['admin'])], deleteProduct);
 router.get('/brands/search/:brand_id',getProductsByBrandId);
 router.get('/categories/search/:category_id',getProductsByCategoryId);
 
